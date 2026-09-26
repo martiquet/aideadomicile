@@ -59,6 +59,10 @@
   /* Texte agrandi sur tout le site : la base passe de 16 à 17 px (toutes les tailles en rem suivent). */
   html { font-size: 106.25%; scroll-behavior: smooth; scroll-padding-top: calc(88px + env(safe-area-inset-top, 0px)); }
   * { box-sizing: inherit; }
+  /* Un élément masqué (attribut hidden) reste masqué même si son style lui
+     donne un display (block, grid, flex…). Indispensable hors de claude.ai,
+     par exemple sur GitHub Pages. */
+  [hidden] { display: none !important; }
 
   body {
     margin: 0;
