@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://martiquet.github.io/aideadomicile/sitemap.xml

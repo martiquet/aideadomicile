@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mentions légales — Aide à Dom</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://martiquet.github.io/aideadomicile/mentions-legales.html">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F4F7FA; --surface: #FFFFFF; --ink: #263440; --ink-soft: #5C6B75;
+    --pine: #5B8AAE; --pine-deep: #355C77; --pine-tint: #E7EFF4; --line: rgba(38,52,64,0.14);
+    --warn-bg: #FFF7E6; --warn-line: #E2B452; --warn-ink: #5E4510;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Atkinson Hyperlegible", sans-serif; font-size: 18px; line-height: 1.65; }
+  h1, h2 { font-family: "Lexend", sans-serif; font-weight: 600; color: var(--pine-deep); }
+  a { color: var(--pine-deep); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px 80px; }
+  header { padding: 28px 0; border-bottom: 1px solid var(--line); margin-bottom: 40px; }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-bottom: 0; }
+  .wordmark { font-family: "Lexend", sans-serif; font-weight: 600; font-size: 1.2rem; color: var(--pine-deep); text-decoration: none; }
+  .back { color: var(--ink-soft); text-decoration: none; font-weight: 600; }
+  .back:hover { color: var(--pine-deep); }
+  h1 { font-size: 1.9rem; margin: 0 0 8px; }
+  .updated { color: var(--ink-soft); font-size: 0.95rem; margin: 0 0 32px; }
+  h2 { font-size: 1.25rem; margin: 40px 0 12px; }
+  p { margin: 0 0 16px; }
+  ul { padding-left: 22px; margin: 0 0 16px; }
+  li { margin-bottom: 6px; }
+  .todo {
+    display: inline-block; padding: 2px 10px; border-radius: 999px;
+    background: var(--warn-bg); border: 1.5px solid var(--warn-line); color: var(--warn-ink);
+    font-size: 0.85rem; font-weight: 700;
+  }
+  .notice { margin: 0 0 32px; padding: 16px 20px; border-radius: 12px; background: var(--warn-bg); border: 1.5px solid var(--warn-line); color: var(--warn-ink); }
+  .notice p { margin: 0; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a href="index.html" class="wordmark">Aide à Dom</a>
+    <a href="index.html" class="back">← Retour au site</a>
+  </div>
+</header>
+<main class="wrap">
+  <h1>Mentions légales</h1>
+  <p class="updated" data-lastmod>Dernière mise à jour : </p>
+
+  <div class="notice">
+    <p><strong>Site en cours de développement.</strong> Les informations marquées <span class="todo">À compléter</span> doivent être renseignées avant l'ouverture réelle du site au public, dès que la structure (auto-entreprise, société…) est créée. En l'état, ce document est un brouillon et n'a pas de valeur légale complète.</p>
+  </div>
+
+  <h2>Éditeur du site</h2>
+  <p>
+    Nom / raison sociale : <span class="todo">À compléter</span><br>
+    Statut : <span class="todo">À compléter (ex. auto-entrepreneur, société)</span><br>
+    Adresse : <span class="todo">À compléter</span><br>
+    SIRET : <span class="todo">À compléter</span><br>
+    Email : contact@aideadomcontact.fr (aideadomcontact@gmail.com)<br>
+    Téléphone : 07 81 42 63 51
+  </p>
+
+  <h2>Directeur de la publication</h2>
+  <p><span class="todo">À compléter</span></p>
+
+  <h2>Hébergement</h2>
+  <p>Selon la version consultée, ce site est hébergé par&nbsp;:</p>
+  <ul>
+    <li>Anthropic, PBC — 548 Market St, PMB 90375, San Francisco, CA 94104, États-Unis (version publiée sur claude.ai)</li>
+    <li>GitHub, Inc. — 88 Colin P Kelly Jr St, San Francisco, CA 94107, États-Unis (version publiée sur GitHub Pages)</li>
+  </ul>
+
+  <h2>Propriété intellectuelle</h2>
+  <p>L'ensemble des textes, illustrations et éléments graphiques de ce site est la propriété de l'éditeur du site, sauf mention contraire. Toute reproduction sans autorisation est interdite.</p>
+
+  <h2>Données personnelles</h2>
+  <p>Le traitement des données personnelles est détaillé dans la <a href="confidentialite.html">politique de confidentialité</a>.</p>
+
+  <h2>Médiation de la consommation</h2>
+  <p>Conformément à l'article L.616-1 du Code de la consommation, en cas de litige, l'utilisateur consommateur peut recourir gratuitement à un médiateur de la consommation. Le médiateur compétent sera précisé ici dès que l'activité sera officiellement déclarée : <span class="todo">À compléter</span>.</p>
+</main>
+<script>
+  var d = new Date(document.lastModified);
+  var txt = isNaN(d) ? '' : d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+  document.querySelectorAll('[data-lastmod]').forEach(function (el) { el.textContent = 'Dernière mise à jour : ' + (txt || 'récemment'); });
+</script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Politique de cookies — Aide à Dom</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://martiquet.github.io/aideadomicile/cookies.html">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F4F7FA; --surface: #FFFFFF; --ink: #263440; --ink-soft: #5C6B75;
+    --pine: #5B8AAE; --pine-deep: #355C77; --pine-tint: #E7EFF4; --line: rgba(38,52,64,0.14);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Atkinson Hyperlegible", sans-serif; font-size: 18px; line-height: 1.65; }
+  h1, h2 { font-family: "Lexend", sans-serif; font-weight: 600; color: var(--pine-deep); }
+  a { color: var(--pine-deep); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px 80px; }
+  header { padding: 28px 0; border-bottom: 1px solid var(--line); margin-bottom: 40px; }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-bottom: 0; }
+  .wordmark { font-family: "Lexend", sans-serif; font-weight: 600; font-size: 1.2rem; color: var(--pine-deep); text-decoration: none; }
+  .back { color: var(--ink-soft); text-decoration: none; font-weight: 600; }
+  .back:hover { color: var(--pine-deep); }
+  h1 { font-size: 1.9rem; margin: 0 0 8px; }
+  .updated { color: var(--ink-soft); font-size: 0.95rem; margin: 0 0 32px; }
+  h2 { font-size: 1.25rem; margin: 40px 0 12px; }
+  p { margin: 0 0 16px; }
+  table { width: 100%; border-collapse: collapse; margin: 0 0 20px; font-size: 0.96rem; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--pine-deep); font-family: "Lexend", sans-serif; font-weight: 600; }
+  .good { margin: 0 0 32px; padding: 16px 20px; border-radius: 12px; background: #DDEEDF; color: #2F6B3A; }
+  .good p { margin: 0; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a href="index.html" class="wordmark">Aide à Dom</a>
+    <a href="index.html" class="back">← Retour au site</a>
+  </div>
+</header>
+<main class="wrap">
+  <h1>Politique de cookies</h1>
+  <p class="updated" data-lastmod>Dernière mise à jour : </p>
+
+  <div class="good">
+    <p><strong>Aide à Dom n'utilise aucun cookie de suivi, de mesure d'audience ou de publicité.</strong> Nous n'avons donc pas besoin de vous demander votre consentement pour l'instant : les seules informations conservées dans votre navigateur sont strictement nécessaires au fonctionnement du site.</p>
+  </div>
+
+  <h2>Ce que nous utilisons</h2>
+  <p>Le site utilise le <strong>stockage local de votre navigateur</strong> (« localStorage »), et non des cookies à proprement parler. C'est un espace de mémoire propre à votre navigateur, que nous seuls (le site) pouvons lire.</p>
+  <table>
+    <tr><th>Nom</th><th>À quoi ça sert</th><th>Durée</th></tr>
+    <tr><td><code>aideadom.session</code></td><td>Garde votre connexion active, pour ne pas avoir à ressaisir votre email et votre mot de passe à chaque visite</td><td>Jusqu'à ce que vous vous déconnectiez ou effaciez les données de votre navigateur</td></tr>
+  </table>
+  <p>Cette information reste uniquement sur votre appareil : elle n'est ni transmise à des tiers, ni utilisée pour vous suivre d'un site à l'autre. Selon les recommandations de la CNIL, ce type de stockage strictement nécessaire à la fourniture du service (comme un identifiant de connexion) est exempté de consentement préalable.</p>
+
+  <h2>Pas de mesure d'audience pour l'instant</h2>
+  <p>Le site n'utilise aujourd'hui aucun outil de statistiques (Google Analytics ou équivalent) ni aucune publicité. Si cela change à l'avenir, cette page sera mise à jour et un bandeau vous demandant votre consentement sera ajouté avant toute activation.</p>
+
+  <h2>Comment tout effacer</h2>
+  <p>Vous pouvez à tout moment effacer les données stockées par ce site depuis les réglages de confidentialité de votre navigateur (recherchez « données de site » ou « stockage local »), ou simplement en utilisant le bouton « Se déconnecter » du site.</p>
+
+  <h2>En savoir plus</h2>
+  <p>Voir aussi notre <a href="confidentialite.html">politique de confidentialité</a>.</p>
+</main>
+<script>
+  var d = new Date(document.lastModified);
+  var txt = isNaN(d) ? '' : d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+  document.querySelectorAll('[data-lastmod]').forEach(function (el) { el.textContent = 'Dernière mise à jour : ' + (txt || 'récemment'); });
+</script>
+</body>
+</html>

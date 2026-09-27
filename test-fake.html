@@ -1,6 +1,83 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+<script>
+/* Fausse base de données pour tests locaux (jamais publiée). État partagé entre onglets via localStorage. */
+(function () {
+  var KEY = 'fakedb2';
+  var LAT = 50.6292, LNG = 3.0573;
+  var now = new Date().toISOString();
+  function seed() {
+    return {
+      candidatures_pro: {
+        P1: { type: 'professionnel', statut: 'validee', prenom: 'Julien', nom: 'TestPro1', email: 'testpro1@example.com', emailKey: 'testpro1@example.com', telephone: '06 12 34 56 78', metier: 'Femme de ménage', secteur: 'Lille (59)', villeLat: LAT, villeLng: LNG, rayon: '15', dispo: 'Temps plein', createdAt: now, beneficiaires: {} },
+        P2: { type: 'professionnel', statut: 'validee', prenom: 'Sophie', nom: 'TestPro2', email: 'testpro2@example.com', emailKey: 'testpro2@example.com', telephone: '06 22 33 44 55', metier: 'Femme de ménage', secteur: 'Lille (59)', villeLat: LAT, villeLng: LNG, rayon: '15', dispo: 'Matins', createdAt: now, beneficiaires: {} }
+      },
+      demandes_particuliers: {
+        D1: { type: 'particulier', statut: 'en_attente', besoins: ['menage'], metiers: ['Femme de ménage', 'Auxiliaire de vie'], adresse: { numero: '12', rue: 'Rue de Test', complement: '', codePostal: '59', ville: 'Lille' }, lat: LAT, lng: LNG, positionApprox: false, pourQui: 'moi', frequence: 'jours', debut: 'vite', note: 'Test', civilite: 'Madame', prenom: 'Marie', nom: 'TestPart1', email: 'testpart1@example.com', emailKey: 'testpart1@example.com', telephone: '06 98 76 54 32', createdAt: now, missionId: 'M1', enLigne: true, intervenants: {} }
+      },
+      missions: {
+        M1: { demandeId: 'D1', statut: 'ouverte', ville: 'Lille (59)', adresseComplete: '12 Rue de Test, 59 Lille', lat: LAT, lng: LNG, metiers: ['Femme de ménage', 'Auxiliaire de vie'], besoins: ['menage'], titre: 'Entretien du logement et du linge', duree: 'Tous les jours', date: 'Dès que possible', description: 'Pour la personne elle-même.', createdAt: now, intervenants: {} }
+      },
+      avis: {}, planning: {}, reinitialisations_mdp: {}
+    };
+  }
+  var q = new URLSearchParams(location.search);
+  var store = null;
+  try { store = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) {}
+  if (!store || q.get('reset')) { store = seed(); localStorage.setItem(KEY, JSON.stringify(store)); }
+  var as = q.get('as');
+  if (as === 'pro' || as === 'pro2') localStorage.setItem('aideadom.session', as === 'pro' ? 'P1' : 'P2');
+  if (as === 'part') localStorage.setItem('aideadom.session', 'part:D1');
+  var listeners = [];
+  function clone(o) { return JSON.parse(JSON.stringify(o)); }
+  function fire() { listeners.slice().forEach(function (l) { l(); }); }
+  function save() { localStorage.setItem(KEY, JSON.stringify(store)); fire(); }
+  window.addEventListener('storage', function (e) { if (e.key === KEY && e.newValue) { store = JSON.parse(e.newValue); fire(); } });
+  function docSnap(c, id) { var o = (store[c] || {})[id]; return { id: id, exists: !!o, data: function () { return clone(o || {}); } }; }
+  function query(c, filters, order, lim) {
+    function qs() {
+      var ids = Object.keys(store[c] || {}).filter(function (id) { return filters.every(function (f) { return store[c][id][f[0]] === f[2]; }); });
+      if (order) ids.sort(function (a, b) { var x = store[c][a][order[0]], y = store[c][b][order[0]]; return (x > y ? 1 : x < y ? -1 : 0) * (order[1] === 'desc' ? -1 : 1); });
+      if (lim) ids = ids.slice(0, lim);
+      var docs = ids.map(function (id) { return docSnap(c, id); });
+      return { docs: docs, empty: !docs.length, size: docs.length, forEach: function (fn) { docs.forEach(fn); } };
+    }
+    return {
+      where: function (f, op, v) { return query(c, filters.concat([[f, op, v]]), order, lim); },
+      orderBy: function (f, d) { return query(c, filters, [f, d || 'asc'], lim); },
+      limit: function (n) { return query(c, filters, order, n); },
+      get: function () { return Promise.resolve(qs()); },
+      onSnapshot: function (h) { var l = function () { h(qs()); }; listeners.push(l); setTimeout(l, 0); return function () { listeners = listeners.filter(function (x) { return x !== l; }); }; }
+    };
+  }
+  var db = {
+    collection: function (c) {
+      store[c] = store[c] || {};
+      var base = query(c, [], null, 0);
+      base.add = function (o) { var id = c.slice(0, 1) + '-' + Math.random().toString(36).slice(2, 8); store[c][id] = clone(o); save(); return Promise.resolve({ id: id }); };
+      base.doc = function (id) {
+        return {
+          get: function () { return Promise.resolve(docSnap(c, id)); },
+          update: function (d) { store[c][id] = Object.assign(store[c][id] || {}, clone(d)); save(); return Promise.resolve(); },
+          set: function (d) { store[c][id] = clone(d); save(); return Promise.resolve(); },
+          delete: function () { delete store[c][id]; save(); return Promise.resolve(); },
+          onSnapshot: function (h) { var l = function () { h(docSnap(c, id)); }; listeners.push(l); setTimeout(l, 0); return function () { listeners = listeners.filter(function (x) { return x !== l; }); }; }
+        };
+      };
+      return base;
+    }
+  };
+  window.__fakeStore = function () { return store; };
+  window.claude = { use: function (n) {
+    if (n === 'db') return Promise.resolve(db);
+    if (n === 'assets') return Promise.resolve({ upload: function () { return Promise.resolve({ id: 'x' }); } });
+    if (n === 'user') return Promise.resolve({ isOwner: function () { return Promise.resolve(true); }, canEdit: function () { return Promise.resolve(true); } });
+    return Promise.resolve(null);
+  } };
+})();
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Aide à Dom — Accompagnement à domicile</title>
