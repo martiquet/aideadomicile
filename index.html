@@ -10,9 +10,9 @@
   (function () {
     try {
       var saved = localStorage.getItem('aideadom.theme');
-      if (saved === 'light' || saved === 'dark') {
-        document.documentElement.setAttribute('data-theme', saved);
-      }
+      // Le site démarre toujours en mode clair tant que la personne n'a pas choisi elle-même
+      // le mode sombre (bouton dans l'en-tête) — on ne suit pas la préférence système.
+      document.documentElement.setAttribute('data-theme', saved === 'dark' ? 'dark' : 'light');
     } catch (e) {}
   })();
 </script>
@@ -139,7 +139,8 @@
     align-items: center;
     justify-content: space-between;
     gap: 24px;
-    padding: 18px 0;
+    padding-top: 18px;
+    padding-bottom: 18px;
   }
   .wordmark {
     display: flex;
@@ -1438,7 +1439,7 @@
   .header-power:active { transform: translateY(1px) scale(0.92); box-shadow: inset 0 3px 8px rgba(20, 38, 52, 0.45); }
   @media (prefers-reduced-motion: reduce) { .header-login:hover { transform: none; } }
   @media (max-width: 560px) {
-    .nav-row { flex-wrap: wrap; row-gap: 12px; padding: 14px 0; }
+    .nav-row { flex-wrap: wrap; row-gap: 12px; padding-top: 14px; padding-bottom: 14px; }
   }
 
   /* Espace professionnel */
@@ -2163,6 +2164,7 @@
     body.menu-open nav.primary.links {
       display: flex;
       flex-direction: column;
+      align-items: stretch;
       gap: 2px;
       position: absolute;
       top: 100%;
@@ -2482,7 +2484,11 @@
   .ag-chip span { display: inline-block; padding: 7px 12px; border-radius: 999px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); font-size: 0.93rem; font-weight: 600; transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease; }
   .ag-chip:hover span { border-color: var(--pine); }
   .ag-chip input:checked + span { background: var(--pine); border-color: var(--pine); color: var(--on-accent); }
-  .ag-chip input:focus-visible + span { outline: 2.5px solid var(--focus); outline-offset: 2px; }  .ag-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .ag-chip input:focus-visible + span { outline: 2.5px solid var(--focus); outline-offset: 2px; }
+  .ag-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .ag-row > * { min-width: 0; }
+  .ag-row input { width: 100%; min-width: 0; }
+  @media (max-width: 360px) { .ag-row { grid-template-columns: 1fr; } }
   .ag-form-actions { display: flex; flex-wrap: wrap; gap: 10px; }
   .ag-error { margin: 0; color: #B3492F; font-weight: 600; }
   .ag-empty { margin: 0; color: var(--ink-soft); }
@@ -4238,15 +4244,22 @@
       head.appendChild(posted);
       li.appendChild(head);
 
-      // 2. Distance depuis la ville du professionnel
+      // 2. Distance depuis la ville du professionnel : la distance à vol d'oiseau
+      // s'affiche tout de suite, puis est remplacée par la distance réelle par la route
+      // la plus rapide dès que le service d'itinéraire (IGN) répond.
       var hasCoords = currentPro.villeLat != null && m.lat != null;
       if (hasCoords) {
         var km = distanceKm(currentPro.villeLat, currentPro.villeLng, m.lat, m.lng);
         var dist = document.createElement('p');
         dist.className = 'mission-distance';
-        dist.textContent = (km < 1 ? 'Moins d’1 km' : 'À ' + Math.round(km) + ' km') +
-          (villePro ? ' de ' + villePro : ' de chez vous');
+        var destSuffix = villePro ? ' de ' + villePro : ' de chez vous';
+        dist.textContent = (km < 1 ? 'Moins d’1 km' : 'À ' + Math.round(km) + ' km') + destSuffix + ' (à vol d’oiseau)';
         li.appendChild(dist);
+        routeDistanceKm(currentPro.villeLat, currentPro.villeLng, m.lat, m.lng).then(function (route) {
+          if (!route || !dist.isConnected) return;
+          var mins = route.minutes < 60 ? route.minutes + ' min' : Math.floor(route.minutes / 60) + ' h ' + (route.minutes % 60 ? (route.minutes % 60) + ' min' : '');
+          dist.textContent = (route.km < 1 ? 'Moins d’1 km' : route.km + ' km') + destSuffix + ' (' + mins + ')';
+        });
       }
 
       // Besoins : une pastille par besoin (plutôt qu'une longue phrase avec des virgules)
@@ -4750,12 +4763,8 @@
       else if (!/^0[67]/.test(tel)) bad(f.telephone, 'Indiquez un numéro de portable commençant par 06 ou 07.');
       else if (tel.length !== 10) bad(f.telephone, 'Le numéro doit contenir 10 chiffres (il en a ' + tel.length + ').');
 
-      var saisie = stripAccents(f.ville.value.trim());
-      var ville = villesFrance.filter(function (v) {
-        return stripAccents(villeLabel(v)) === saisie || stripAccents(v.nom) === saisie;
-      })[0];
-      if (!f.ville.value.trim()) bad(f.ville, 'Ce champ est obligatoire.');
-      else if (!ville) bad(f.ville, 'Choisissez une ville dans la liste proposée.');
+      var saisieVille = f.ville.value.trim();
+      if (!saisieVille) bad(f.ville, 'Ce champ est obligatoire.');
 
       var rayon = parseInt(f.rayon.value, 10);
       if (!rayon || rayon < 1) bad(f.rayon, 'Indiquez un nombre de kilomètres.');
@@ -4764,23 +4773,37 @@
 
       saveBtn.disabled = true;
       saveBtn.textContent = 'Enregistrement...';
-      Promise.resolve(dbReady).then(function (db) {
-        if (!db || !currentProId) throw new Error('db');
-        return db.collection('candidatures_pro').doc(currentProId).update({
-          prenom: f.prenom.value.trim(),
-          nom: f.nom.value.trim(),
-          telephone: tel.replace(/(\d{2})(?=\d)/g, '$1 '),
-          metier: f.metier.value,
-          secteur: villeLabel(ville),
-          villeLat: ville.lat,
-          villeLng: ville.lng,
-          rayon: String(rayon),
-          dispo: f.dispo.value.trim(),
-          modifieLe: new Date().toISOString()
+      var saisie = stripAccents(saisieVille);
+      geocodeCommunes(saisieVille).then(function (matches) {
+        var ville = matches.filter(function (v) {
+          return stripAccents(communeLabel(v)) === saisie || stripAccents(v.nom) === saisie;
+        })[0] || villesFrance.filter(function (v) {
+          return stripAccents(villeLabel(v)) === saisie || stripAccents(v.nom) === saisie;
+        })[0];
+        if (!ville) {
+          bad(f.ville, 'Choisissez une ville dans la liste proposée.');
+          first.focus();
+          throw { handled: true };
+        }
+        return Promise.resolve(dbReady).then(function (db) {
+          if (!db || !currentProId) throw new Error('db');
+          return db.collection('candidatures_pro').doc(currentProId).update({
+            prenom: f.prenom.value.trim(),
+            nom: f.nom.value.trim(),
+            telephone: tel.replace(/(\d{2})(?=\d)/g, '$1 '),
+            metier: f.metier.value,
+            secteur: villeLabel(ville),
+            villeLat: ville.lat,
+            villeLng: ville.lng,
+            rayon: String(rayon),
+            dispo: f.dispo.value.trim(),
+            modifieLe: new Date().toISOString()
+          });
         });
       }).then(function () {
         closeModal(editDialog);
-      }).catch(function () {
+      }).catch(function (e) {
+        if (e && e.handled) return;
         editError.textContent = 'Vos modifications n’ont pas pu être enregistrées. Réessayez dans un instant.';
         editError.hidden = false;
       }).then(function () {
@@ -4835,7 +4858,8 @@
     }).catch(function () { return null; });
   }
 
-  // Remplit une fois la liste des villes proposées pendant la saisie.
+  // Remplit une fois la liste des villes proposées pendant la saisie, avant que l'API en
+  // direct (wireLiveVilleDatalist) ne prenne le relais dès que la personne tape.
   function fillVilles() {
     var list = document.getElementById('part-villes');
     if (list.childNodes.length) return;
@@ -4845,6 +4869,33 @@
       list.appendChild(o);
     });
   }
+
+  // Relie un champ ville texte + <datalist> à l'API Adresse (communes de France entière) :
+  // à chaque frappe, les suggestions en direct remplacent la petite liste locale de secours.
+  function wireLiveVilleDatalist(input, datalist) {
+    var timer = null, seq = 0;
+    input.addEventListener('input', function () {
+      var q = input.value.trim();
+      if (q.length < 2) return;
+      clearTimeout(timer);
+      var mySeq = ++seq;
+      timer = setTimeout(function () {
+        geocodeCommunes(q).then(function (matches) {
+          if (mySeq !== seq) return;
+          datalist.innerHTML = '';
+          matches.forEach(function (v) {
+            var o = document.createElement('option');
+            o.value = v.nom;
+            datalist.appendChild(o);
+          });
+        });
+      }, 200);
+    });
+  }
+
+  wireLiveVilleDatalist(document.getElementById('part-ville'), document.getElementById('part-villes'));
+  wireLiveVilleDatalist(document.getElementById('pe-ville'), document.getElementById('part-villes'));
+  wireLiveVilleDatalist(document.getElementById('edit-ville'), document.getElementById('edit-villes'));
 
   (function setupParticulier() {
     var partDlg = document.getElementById('part-modal');
@@ -4996,8 +5047,6 @@
       return ok;
     }
 
-    var localiser = localiserVille;
-
     function envoyer() {
       nextBtn.disabled = true;
       nextBtn.textContent = 'Envoi en cours...';
@@ -5006,13 +5055,15 @@
       besoins.forEach(function (b) { BESOINS[b].metiers.forEach(function (m) { if (metiers.indexOf(m) === -1) metiers.push(m); }); });
       var ville = capitalize($('part-ville').value.trim());
       var cp = $('part-cp').value;
-      var pos = localiser(ville, cp);
       var email = $('part-email').value.trim();
       var key = emailKey(email);
       var now = new Date().toISOString();
-      var db, record, demandeId;
+      var db, record, demandeId, pos;
 
-      Promise.resolve(dbReady).then(function (d) {
+      localiserVilleAsync(ville, cp).then(function (p) {
+        pos = p;
+        return dbReady;
+      }).then(function (d) {
         db = d;
         if (!db) throw { msg: 'L’envoi fonctionne uniquement depuis le lien claude.ai de cette page.' };
         return db.collection('demandes_particuliers').where('emailKey', '==', key).limit(1).get();
@@ -5342,10 +5393,13 @@
       if (first) { first.focus(); return; }
 
       var ville = capitalize($('pe-ville').value.trim());
-      var pos = localiserVille(ville, cp);
       saveBtn.disabled = true;
       saveBtn.textContent = 'Enregistrement...';
-      Promise.resolve(dbReady).then(function (db) {
+      var pos;
+      localiserVilleAsync(ville, cp).then(function (p) {
+        pos = p;
+        return dbReady;
+      }).then(function (db) {
         if (!db || !currentPartId) throw new Error('db');
         var missionId = currentPart.missionId;
         return db.collection('demandes_particuliers').doc(currentPartId).update({
@@ -7056,6 +7110,71 @@
     return R * c;
   }
 
+  // Distance et durée réelles par la route la plus rapide, via le service de calcul
+  // d'itinéraire de l'IGN (data.geopf.fr, service public français, gratuit, sans clé).
+  // Résout { km, minutes } arrondis, ou null si le service est indisponible ou si le
+  // trajet ne peut pas être calculé (ne bloque jamais l'affichage : à utiliser en plus
+  // de distanceKm, pas à la place, pour ne pas multiplier les appels réseau sur de
+  // grandes listes).
+  function routeDistanceKm(lat1, lng1, lat2, lng2) {
+    var url = 'https://data.geopf.fr/navigation/itineraire?resource=bdtopo-valhalla&profile=car&optimization=fastest'
+      + '&start=' + lng1 + ',' + lat1 + '&end=' + lng2 + ',' + lat2;
+    return fetch(url)
+      .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
+      .then(function (d) {
+        if (typeof d.distance !== 'number') return null;
+        return { km: Math.round(d.distance / 1000), minutes: Math.round(d.duration / 60) };
+      })
+      .catch(function () { return null; });
+  }
+
+  function communeLabel(v) { return v.dept ? v.nom + ' (' + v.dept + ')' : v.nom; }
+
+  // Recherche de communes françaises en direct sur l'API Adresse (Base Adresse Nationale,
+  // data.gouv.fr) : gratuite, sans clé, couvre les ~35 000 communes de France, CORS ouvert.
+  // Ne rejette jamais : si le réseau échoue, on retombe sur la petite liste locale
+  // villesFrance pour que la saisie continue de fonctionner hors ligne.
+  function geocodeCommunes(query) {
+    var q = (query || '').trim();
+    if (!q) return Promise.resolve([]);
+    return fetch('https://api-adresse.data.gouv.fr/search/?type=municipality&limit=8&q=' + encodeURIComponent(q))
+      .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
+      .then(function (data) {
+        return (data.features || []).map(function (f) {
+          var p = f.properties;
+          return {
+            nom: p.city,
+            dept: (p.context || '').split(',')[0].trim(),
+            cp: p.postcode,
+            lat: f.geometry.coordinates[1],
+            lng: f.geometry.coordinates[0]
+          };
+        });
+      })
+      .catch(function () {
+        var qs = stripAccents(q);
+        var local = villesFrance.filter(function (v) { return stripAccents(v.nom).indexOf(qs) === 0; });
+        if (!local.length) local = villesFrance.filter(function (v) { return stripAccents(v.nom).indexOf(qs) !== -1; });
+        return local.slice(0, 8);
+      });
+  }
+
+  // Géolocalise une ville saisie au clavier (sans passer par une liste déroulante) : on
+  // redemande la commune exacte à l'API, en préférant le résultat dont le département du
+  // code postal correspond à celui saisi (utile pour les communes homonymes). Se dégrade
+  // sur l'ancienne logique locale (localiserVille) si l'API est indisponible ou ne connaît
+  // pas cette ville.
+  function localiserVilleAsync(ville, cp) {
+    var v = stripAccents(ville);
+    return geocodeCommunes(ville).then(function (matches) {
+      var exact = matches.filter(function (x) {
+        return stripAccents(x.nom) === v && (!cp || !x.cp || x.cp.slice(0, 2) === cp.slice(0, 2));
+      })[0] || matches.filter(function (x) { return stripAccents(x.nom) === v; })[0];
+      if (exact) return { lat: exact.lat, lng: exact.lng, approx: false };
+      return localiserVille(ville, cp);
+    });
+  }
+
   (function setupAutocomplete() {
     var wrapper = document.getElementById('ville-autocomplete');
     var input = document.getElementById('ville-input');
@@ -7098,39 +7217,40 @@
       activeIndex = -1;
     }
 
+    var lastSelectedLabel = '';
+
     function selectVille(ville) {
-      input.value = ville.dept ? ville.nom + ' (' + ville.dept + ')' : ville.nom;
+      lastSelectedLabel = ville.dept ? ville.nom + ' (' + ville.dept + ')' : ville.nom;
+      input.value = lastSelectedLabel;
       latInput.value = ville.lat;
       lngInput.value = ville.lng;
       closeList();
     }
 
-    // Si la personne modifie le texte à la main après avoir choisi une ville,
-    // on ne garde les coordonnées que si le texte correspond encore exactement
-    // à une ville connue de la liste.
+    // Si la personne modifie le texte à la main après avoir choisi une ville (au lieu de
+    // reprendre une suggestion de la liste), on ne garde les coordonnées que tant que le
+    // texte correspond encore exactement à la ville sélectionnée.
     function clearCoordsIfMismatch() {
-      var current = stripAccents(input.value.trim());
-      var stillMatches = villesFrance.some(function (v) {
-        var display = v.dept ? v.nom + ' (' + v.dept + ')' : v.nom;
-        return stripAccents(v.nom) === current || stripAccents(display) === current;
-      });
-      if (!stillMatches) {
+      if (input.value.trim() !== lastSelectedLabel) {
         latInput.value = '';
         lngInput.value = '';
       }
     }
 
+    var searchTimer = null;
+    var searchSeq = 0;
     input.addEventListener('input', function () {
       clearCoordsIfMismatch();
-      var q = stripAccents(input.value.trim());
+      var q = input.value.trim();
       if (!q) { closeList(); return; }
-      var matches = villesFrance.filter(function (v) {
-        return stripAccents(v.nom).indexOf(q) === 0;
-      });
-      if (!matches.length) {
-        matches = villesFrance.filter(function (v) { return stripAccents(v.nom).indexOf(q) !== -1; });
-      }
-      openList(matches.slice(0, 8));
+      clearTimeout(searchTimer);
+      var seq = ++searchSeq;
+      searchTimer = setTimeout(function () {
+        geocodeCommunes(q).then(function (matches) {
+          if (seq !== searchSeq) return; // une saisie plus récente a déjà relancé une recherche
+          openList(matches);
+        });
+      }, 200);
     });
 
     input.addEventListener('keydown', function (e) {
