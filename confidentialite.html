@@ -3,15 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Politique de confidentialité — Aide à Dom</title>
+<title>Politique de confidentialité — Aide à Domicile</title>
 <meta name="robots" content="noindex">
 <link rel="canonical" href="https://martiquet.github.io/aideadomicile/confidentialite.html">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:"Lexend";font-style:normal;font-weight:100 900;font-display:swap;src:url(fonts/lexend-latin-wght-normal.woff2) format("woff2")}
+@font-face{font-family:"Atkinson Hyperlegible";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/atkinson-hyperlegible-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Atkinson Hyperlegible";font-style:normal;font-weight:700;font-display:swap;src:url(fonts/atkinson-hyperlegible-latin-700-normal.woff2) format("woff2")}
+@font-face{font-family:"Atkinson Hyperlegible";font-style:italic;font-weight:400;font-display:swap;src:url(fonts/atkinson-hyperlegible-latin-400-italic.woff2) format("woff2")}
+</style>
 <style>
   :root {
     --bg: #F4F7FA; --surface: #FFFFFF; --ink: #263440; --ink-soft: #5C6B75;
@@ -54,7 +57,7 @@
 <body>
 <header>
   <div class="wrap">
-    <a href="index.html" class="wordmark">Aide à Dom</a>
+    <a href="index.html" class="wordmark">Aide à Domicile</a>
     <a href="index.html" class="back">← Retour au site</a>
   </div>
 </header>
@@ -67,16 +70,16 @@
   </div>
 
   <div class="alert">
-    <p><strong>À lire avant toute inscription : limite de sécurité actuelle.</strong> Aide à Dom est aujourd'hui un site de démonstration. Techniquement, toute personne disposant du lien d'accès à la page peut consulter l'ensemble des informations enregistrées (y compris les empreintes des mots de passe et les documents envoyés). Aucune donnée n'est encore protégée au niveau attendu d'un site ouvert au public.</p>
+    <p><strong>À lire avant toute inscription : limite de sécurité actuelle.</strong> Aide à Domicile est aujourd'hui un site de démonstration. Techniquement, toute personne disposant du lien d'accès à la page peut consulter l'ensemble des informations enregistrées (y compris les empreintes des mots de passe et les documents envoyés). Aucune donnée n'est encore protégée au niveau attendu d'un site ouvert au public.</p>
     <p>Nous vous recommandons de ne pas utiliser de mot de passe que vous employez ailleurs, et de ne transmettre que les informations strictement nécessaires tant que cette version de démonstration est en ligne. Cette limite sera corrigée avant toute ouverture réelle du service (voir « Sécurité » ci-dessous).</p>
   </div>
 
   <h2>1. Qui est responsable du traitement de vos données&nbsp;?</h2>
-  <p>Le responsable du traitement est l'éditeur du site Aide à Dom, dont l'identité complète figure dans les <a href="mentions-legales.html">mentions légales</a> : <span class="todo">À compléter</span>.</p>
+  <p>Le responsable du traitement est l'éditeur du site Aide à Domicile, <strong>François Martiquet</strong> (voir les <a href="mentions-legales.html">mentions légales</a>).</p>
   <p>Pour toute question ou demande concernant vos données, vous pouvez nous écrire à <strong>aideadomcontact@gmail.com</strong>.</p>
 
   <h2>2. Quelles données nous collectons</h2>
-  <p>Nous ne collectons que les informations nécessaires à la mise en relation entre particuliers et professionnels de l'aide à domicile. Nous ne demandons ni numéro de sécurité sociale, ni pièce d'identité, ni coordonnées bancaires.</p>
+  <p>Nous ne collectons que les informations nécessaires à la mise en relation entre particuliers et professionnels de l'aide à domicile. Nous ne demandons ni numéro de sécurité sociale, ni pièce d'identité, ni coordonnées bancaires, et <strong>nous ne collectons ni ne conservons d'extrait de casier judiciaire</strong> (voir plus bas).</p>
 
   <h3>Si vous vous inscrivez comme professionnel</h3>
   <table>
@@ -84,61 +87,86 @@
     <tr><td>Prénom, nom, email, téléphone</td><td>Pour créer votre compte et vous recontacter</td></tr>
     <tr><td>Mot de passe</td><td>Pour votre connexion. Il n'est jamais enregistré en clair, seulement une empreinte technique (hachage) qui ne permet pas de le retrouver</td></tr>
     <tr><td>Métier, ville d'intervention, rayon de déplacement, disponibilités</td><td>Pour vous proposer les demandes correspondant à votre secteur</td></tr>
-    <tr><td>CV, diplôme (le cas échéant), message libre</td><td>Pour étudier votre candidature</td></tr>
+    <tr><td>Message libre</td><td>Pour étudier votre candidature</td></tr>
+    <tr><td>Aucun CV ni diplôme n'est demandé ni conservé par le site</td><td>Vous les transmettez directement au particulier, par e-mail, une fois qu'il a validé votre intervention. Cet échange se fait en dehors du site, entre vous et lui</td></tr>
+    <tr><td>E-mails de notification (une demande de votre secteur, un particulier qui valide votre intervention)</td><td>Pour vous prévenir en plus de la notification affichée dans votre espace. Ces e-mails ne contiennent ni l'adresse, ni le téléphone, ni l'e-mail du particulier</td></tr>
+    <tr><td>Pour les aides-soignants : case cochée par laquelle vous vous engagez à remettre diplôme et extrait de casier judiciaire (bulletin n°3) directement au particulier, une fois qu'il a validé votre intervention</td><td>Pour garder la trace de votre engagement. L'extrait lui-même n'est jamais envoyé au site : vous le remettez directement au particulier, avant le début de l'intervention</td></tr>
     <tr><td>Avis laissés sur vous par des particuliers</td><td>Pour aider les autres particuliers à choisir un intervenant. Ils ne s’affichent pas dans votre espace, mais vous pouvez en demander une copie, ou la suppression d’un avis qui vous paraît abusif, en nous écrivant</td></tr>
   </table>
 
   <h3>Si vous faites une demande d'aide (particulier)</h3>
   <table>
     <tr><th>Donnée</th><th>Pourquoi</th></tr>
-    <tr><td>Civilité, prénom, nom, email, téléphone</td><td>Pour créer votre compte et pour que le professionnel qui accepte votre demande puisse vous joindre</td></tr>
-    <tr><td>Adresse postale complète</td><td>Pour indiquer au professionnel où intervenir, et calculer le trajet</td></tr>
+    <tr><td>Civilité, prénom, nom, email, téléphone</td><td>Pour créer votre compte et pour que le professionnel puisse vous joindre</td></tr>
+    <tr><td>E-mails de notification (un professionnel se propose)</td><td>Pour vous prévenir en plus de la notification affichée dans votre espace. Ces e-mails ne contiennent ni votre adresse, ni votre téléphone, ni vos informations de santé</td></tr>
+    <tr><td>Adresse postale complète</td><td>Pour indiquer au professionnel que vous avez confirmé où intervenir, et calculer le trajet. Elle est vérifiée auprès d'un service public (voir « Services tiers »)</td></tr>
     <tr><td>Mot de passe</td><td>Pour votre connexion (empreinte uniquement, comme ci-dessus)</td></tr>
-    <tr><td>Besoins cochés (toilette, déplacements, repas…)</td><td>Pour trouver un professionnel qualifié pour ces tâches</td></tr>
+    <tr><td>Besoins cochés (toilette, déplacements, repas…), tranche d'âge et niveau d'autonomie (GIR) de la personne aidée</td><td>Pour trouver un professionnel qualifié pour ces tâches et lui permettre de juger s'il peut intervenir</td></tr>
     <tr><td>Pour qui, fréquence, date souhaitée, précisions libres</td><td>Pour préciser votre demande</td></tr>
     <tr><td>Avis laissé sur un intervenant (note, commentaire facultatif, votre prénom)</td><td>Pour aider les autres particuliers à choisir un intervenant</td></tr>
     <tr><td>Rendez-vous du planning (date, horaires, précision)</td><td>Pour organiser les interventions avec votre intervenant</td></tr>
   </table>
 
   <div class="alert">
-    <p><strong>Donnée sensible.</strong> Les « besoins » que vous cochez (aide à la toilette, aux déplacements…) peuvent laisser supposer un état de santé ou une situation de handicap. Le RGPD considère cela comme une <strong>donnée sensible</strong> (article&nbsp;9), qui bénéficie d'une protection renforcée. C'est pourquoi une case de consentement séparée vous est demandée avant l'envoi de votre demande, en plus de l'acceptation générale de cette politique.</p>
+    <p><strong>Données sensibles.</strong> Les « besoins » que vous cochez (aide à la toilette, aux déplacements…), la tranche d'âge et le GIR peuvent révéler un état de santé ou une situation de handicap. Le RGPD considère cela comme une <strong>donnée sensible</strong> (article&nbsp;9), qui bénéficie d'une protection renforcée. C'est pourquoi une case de consentement séparée vous est demandée avant l'envoi de votre demande, en plus de l'acceptation générale de cette politique.</p>
   </div>
 
   <h2>3. Qui voit vos données</h2>
   <ul>
-    <li><strong>Les professionnels</strong> ne voient, pour une demande donnée, que la ville et l'adresse (pour préparer le trajet) et les besoins cochés — jamais votre nom, votre email ou votre téléphone, tant qu'ils n'ont pas explicitement accepté d'intervenir chez vous («&nbsp;Accepter la mission&nbsp;»). Une fois la mission acceptée, votre nom et votre téléphone leur sont montrés pour vous contacter.</li>
-    <li><strong>Les particuliers</strong> voient, pour un professionnel qui accepte d'intervenir chez eux, son nom, son métier et son téléphone.</li>
+    <li><strong>Les professionnels validés de votre secteur et de votre métier recherché</strong> voient, pour une demande donnée : la ville, les besoins cochés, la fréquence, la date souhaitée et « pour qui » (vous-même ou un proche). Ils peuvent cliquer sur «&nbsp;Prendre contact&nbsp;» : votre <strong>civilité, votre nom de famille (sans votre prénom) et votre téléphone</strong> leur sont alors affichés pour vous appeler, et le site garde la trace de ce contact dans votre demande.</li>
+    <li><strong>Votre adresse exacte, votre email, la tranche d'âge, le GIR et vos précisions libres</strong> ne sont montrés qu'au professionnel dont vous avez <strong>confirmé la proposition</strong> depuis « Mes intervenants ».</li>
+    <li><strong>Les particuliers</strong> voient, pour un professionnel qui propose d'intervenir chez eux, son nom, son métier et son téléphone.</li>
     <li>L'éditeur du site accède aux candidatures professionnelles pour les valider ou les refuser.</li>
     <li><strong>Les avis</strong> laissés par un particulier sur un intervenant (note, commentaire, prénom de l’auteur) sont visibles des seuls autres particuliers. Ils ne sont pas affichés aux professionnels dans leur espace. Les avis abusifs (injurieux, mensongers, hors sujet) peuvent être masqués par l’éditeur.</li>
     <li>Vos données ne sont ni vendues, ni partagées avec un tiers à des fins commerciales.</li>
   </ul>
+  <p>Une fois qu'un professionnel a vos coordonnées, il devient lui-même responsable de l'usage qu'il en fait : il s'engage à ne les utiliser que pour organiser l'intervention et à respecter leur confidentialité (voir les <a href="cgu.html">conditions d'utilisation</a>).</p>
 
   <h2>4. Base légale et consentement</h2>
-  <p>Le traitement de vos données repose sur votre <strong>consentement</strong>, donné en cochant la case correspondante lors de l'inscription. Pour les données pouvant révéler un état de santé ou de handicap, un <strong>consentement explicite et distinct</strong> vous est demandé (article&nbsp;9.2.a du RGPD).</p>
-  <p>Vous pouvez retirer votre consentement à tout moment en nous écrivant, ce qui entraînera la suppression de votre compte.</p>
+  <p>La création de votre compte et la mise en relation reposent sur l'<strong>exécution du service</strong> que vous demandez (article&nbsp;6.1.b du RGPD).</p>
+  <p>Pour les données pouvant révéler un état de santé ou de handicap (besoins, âge, GIR), un <strong>consentement explicite et distinct</strong> vous est demandé (article&nbsp;9.2.a du RGPD), en cochant la case prévue avant l'envoi de votre demande.</p>
+  <p>Vous pouvez retirer votre consentement à tout moment en nous écrivant, ce qui entraînera la suppression de votre compte et de votre demande.</p>
+  <p>Nous ne prenons aucune décision automatisée vous concernant : les demandes sont simplement présentées aux professionnels selon leur métier, leur secteur et la distance.</p>
 
   <h2>5. Durée de conservation</h2>
-  <p>Vos données sont conservées tant que votre compte est actif. Une politique précise de suppression automatique après une période d'inactivité sera mise en place avant l'ouverture réelle du site : <span class="todo">À compléter (durée exacte)</span>.</p>
+  <ul>
+    <li>Compte actif : vos données sont conservées tant que votre compte est actif.</li>
+    <li>Compte inactif depuis 24 mois : suppression du compte et des données associées.</li>
+    <li>Candidature professionnelle refusée : suppression sous 6 mois.</li>
+    <li>Demande désactivée par le particulier : suppression après 12 mois.</li>
+  </ul>
+  <p>À ce jour, ces suppressions se font manuellement, sur demande. La suppression automatique sera mise en place avant l'ouverture réelle du site.</p>
 
   <h2>6. Hébergement des données</h2>
-  <p>Selon la version du site que vous consultez, vos données sont stockées soit dans la base de données associée à cette page sur la plateforme Claude (Anthropic, PBC — États-Unis), soit — une fois le site réellement mis en ligne — sur un hébergement dédié restant à définir : <span class="todo">À compléter</span>.</p>
+  <p>Selon la version du site que vous consultez, vos données sont stockées soit dans la base de données associée à cette page sur la plateforme Claude (Anthropic, PBC — États-Unis), soit — une fois le site réellement mis en ligne — sur un hébergement dédié restant à définir : <span class="todo">À compléter</span>. Le site lui-même est servi par GitHub (GitHub, Inc. — États-Unis).</p>
+  <p>Ces hébergeurs étant établis aux États-Unis, des données peuvent être transférées hors de l'Union européenne. Ces transferts doivent être encadrés par les garanties prévues par le RGPD (décision d'adéquation ou clauses contractuelles types). <span class="todo">À vérifier avant l'ouverture, ainsi que l'hébergement des données de santé</span>.</p>
 
   <h2>7. Sécurité</h2>
   <p>Voir l'encadré en haut de cette page : la version actuelle du site est une démonstration, et les mesures de sécurité attendues d'un service ouvert au public (chiffrement renforcé, accès restreint aux seules personnes autorisées, hébergement dédié) ne sont pas encore en place. Elles seront mises en œuvre avant toute ouverture réelle.</p>
 
-  <h2>8. Vos droits</h2>
-  <p>Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation, d'opposition et de portabilité de vos données. Vous pouvez exercer ces droits en écrivant à <strong>aideadomcontact@gmail.com</strong>.</p>
+  <h2>8. Services tiers contactés depuis votre navigateur</h2>
+  <ul>
+    <li><strong>Vérification de l'adresse (particuliers)</strong> : quand vous saisissez votre adresse, le numéro, la rue, le code postal et la ville sont envoyés à la Base Adresse Nationale (api-adresse.data.gouv.fr) et à geo.api.gouv.fr, des services publics français, uniquement pour vérifier que l'adresse existe. Ils ne reçoivent ni votre nom, ni votre email, ni votre téléphone.</li>
+    <li><strong>Calcul de trajet (professionnels)</strong> : pour estimer la distance, la position de la ville du professionnel et celle de la ville de la demande sont envoyées au service d'itinéraire de l'IGN (data.geopf.fr), un service public.</li>
+    <li><strong>Google Maps</strong> : le bouton «&nbsp;Voir le trajet&nbsp;» ouvre Google Maps, seulement si vous cliquez dessus. Google reçoit alors le lieu de départ et d'arrivée, et ses propres règles s'appliquent.</li>
+    <li><strong>Recherche de commune</strong> : la liste des communes de France est intégrée à la page, aucune donnée n'est envoyée pendant la saisie d'une ville.</li>
+    <li><strong>Polices de caractères</strong> : elles sont hébergées sur le site lui-même. Aucune donnée n'est envoyée à Google Fonts.</li>
+    <li><strong>Assistant virtuel (mini chat)</strong> : c'est une intelligence artificielle. Selon la version du site, il répond à partir de réponses préparées (rien n'est envoyé à un tiers) ou en interrogeant un service d'IA, auquel vos messages sont alors transmis pour produire la réponse. Le site n'enregistre pas les conversations. N'y écrivez ni donnée de santé, ni coordonnées personnelles. <span class="todo">À compléter à l'ouverture réelle : prestataire d'IA retenu</span></li>
+  </ul>
+
+  <h2>9. Vos droits</h2>
+  <p>Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation, d'opposition et de portabilité de vos données, ainsi que du droit de définir des directives sur leur sort après votre décès. Vous pouvez exercer ces droits en écrivant à <strong>aideadomcontact@gmail.com</strong>. Nous répondons dans un délai d'un mois.</p>
   <p>Vous pouvez aussi modifier vos informations directement depuis votre espace («&nbsp;Modifier mes informations&nbsp;») ou désactiver votre demande (particuliers).</p>
   <p>Si vous estimez que vos droits ne sont pas respectés, vous pouvez adresser une réclamation à la CNIL (3 Place de Fontenoy, TSA 80715, 75334 Paris Cedex 07 — <a href="https://www.cnil.fr" target="_blank" rel="noopener">cnil.fr</a>).</p>
 
-  <h2>9. Cookies et traceurs</h2>
+  <h2>10. Cookies et traceurs</h2>
   <p>Voir la <a href="cookies.html">politique de cookies</a>.</p>
 
-  <h2>10. Mineurs</h2>
+  <h2>11. Mineurs</h2>
   <p>Ce site ne s'adresse pas aux personnes mineures.</p>
 
-  <h2>11. Modifications</h2>
-  <p>Cette politique peut être mise à jour, notamment lors du passage du site en version réelle. La date de dernière mise à jour est indiquée en haut de cette page.</p>
+  <h2>12. Modifications</h2>
+  <p>Cette politique peut être mise à jour, notamment lors du passage du site en version réelle ou de l'ajout d'une offre payante pour les professionnels (qui fera intervenir un prestataire de paiement, présenté ici avant toute activation). La date de dernière mise à jour est indiquée en haut de cette page.</p>
 </main>
 <script>
   var d = new Date(document.lastModified);
